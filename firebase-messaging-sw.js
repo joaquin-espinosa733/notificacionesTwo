@@ -22,12 +22,28 @@ const app = firebase.initializeApp(firebaseConfig);
 const messaging = firebase.messaging(app);
 
 
+// Escucha el evento 'activate' para asegurarse de que el Service Worker esté activo antes de suscribirse a las notificaciones push
+self.addEventListener('activate', async function () {
+  try {
+    // Obtén la suscripción a las notificaciones push
+    const subscription = await self.registration.pushManager.subscribe({
+      userVisibleOnly: true,
+      applicationServerKey: 'BCMsIM4vsjes3m_ILKbQGZBWtSlzDM1Bbmdwl2rYvNNYHV0fnEql7uV6-xRONOUYrJ075zZMbaJTIUK7tV4tFXg'
+    });
+    console.log('Subscribed to push notifications:', subscription);
+  } catch (err) {
+    console.error('Failed to subscribe to push notifications:', err);
+  }
+});
+
+
 messaging.setBackgroundMessageHandler(function (payload) {
   console.log('[firebase-messaging-sw.js] Received background message ', payload);
   // Customize notification here
   const notificationTitle = 'Background Message Title';
   const notificationOptions = {
     body: 'Background Message body.',
+    icon: './firebase-logo.png'
   };
 
   return self.registration.showNotification(notificationTitle,

@@ -41,25 +41,37 @@ function saveTokenToServer(token) {
         });
 }
 // Obtener el token antes de solicitar el permiso de notificación
-getToken(messaging, {
-    vapidKey: "BCMsIM4vsjes3m_ILKbQGZBWtSlzDM1Bbmdwl2rYvNNYHV0fnEql7uV6-xRONOUYrJ075zZMbaJTIUK7tV4tFXg"
-}).then((currentToken) => {
-    if (currentToken) {
-        console.log("Current token:", currentToken);
-        // Enviar el token al servidor
-        saveTokenToServer(currentToken);
-    } else {
-        console.log("Unable to get token");
-    }
-}).catch((err) => {
-    console.error("Error getting token:", err);
-});
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', async function () {
+        try {
+            const registration = await navigator.serviceWorker.register('/firebase-messaging-sw.js');
+            console.log('Service Worker registered:', registration.scope);
 
-// Función para solicitar el permiso de notificación y guardar el token
+            // Solicitar permiso y obtener el token cuando se concede el permiso
+            requestPermissionAndSaveToken();
+        } catch (error) {
+            console.error('Failed to register Service Worker:', error);
+        }
+    });
+}
+
 function requestPermissionAndSaveToken() {
     Notification.requestPermission().then((permission) => {
         if (permission === "granted") {
             console.log("Notification permission granted");
+
+            // Obtener el token usando Firebase Messaging
+            getToken(messaging, { vapidKey: 'BCMsIM4vsjes3m_ILKbQGZBWtSlzDM1Bbmdwl2rYvNNYHV0fnEql7uV6-xRONOUYrJ075zZMbaJTIUK7tV4tFXg' }).then((currentToken) => {
+                if (currentToken) {
+                    console.log("Current token:", currentToken);
+                    // Enviar el token al servidor si es necesario
+                    saveTokenToServer(currentToken);
+                } else {
+                    console.log("Unable to get token");
+                }
+            }).catch((err) => {
+                console.error("Error getting token:", err);
+            });
         } else {
             console.log("Notification permission denied");
         }
@@ -67,6 +79,7 @@ function requestPermissionAndSaveToken() {
         console.error("Error requesting permission:", err);
     });
 }
+
 
 
 

@@ -18,21 +18,13 @@
                 navigator.serviceWorker.register('./firebase-messaging-sw.js').then(function (registration) {
                     // Service Worker registrado correctamente
                     console.log('ServiceWorker registration successful with scope: ', registration.scope);
-                    loadSubscribeScript()
+
                 }, function (err) {
                     // Error al registrar el Service Worker
                     console.error('ServiceWorker registration failed: ', err);
                 });
             });
         }
-
-        function loadSubscribeScript() {
-            const script = document.createElement("script");
-            script.src = "subscribe.js";
-
-            document.body.appendChild(script)
-        }
-
     </script>
 
 </body>
