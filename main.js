@@ -40,24 +40,26 @@ function saveTokenToServer(token) {
             console.error('Error saving token to server:', error);
         });
 }
+// Obtener el token antes de solicitar el permiso de notificación
+getToken(messaging, {
+    vapidKey: "BCMsIM4vsjes3m_ILKbQGZBWtSlzDM1Bbmdwl2rYvNNYHV0fnEql7uV6-xRONOUYrJ075zZMbaJTIUK7tV4tFXg"
+}).then((currentToken) => {
+    if (currentToken) {
+        console.log("Current token:", currentToken);
+        // Enviar el token al servidor
+        saveTokenToServer(currentToken);
+    } else {
+        console.log("Unable to get token");
+    }
+}).catch((err) => {
+    console.error("Error getting token:", err);
+});
 
+// Función para solicitar el permiso de notificación y guardar el token
 function requestPermissionAndSaveToken() {
     Notification.requestPermission().then((permission) => {
         if (permission === "granted") {
             console.log("Notification permission granted");
-            getToken(messaging, {
-                vapidKey: "BCMsIM4vsjes3m_ILKbQGZBWtSlzDM1Bbmdwl2rYvNNYHV0fnEql7uV6-xRONOUYrJ075zZMbaJTIUK7tV4tFXg"
-            }).then((currentToken) => {
-                if (currentToken) {
-                    console.log("Current token:", currentToken);
-                    // Enviar el token al servidor
-                    saveTokenToServer(currentToken);
-                } else {
-                    console.log("Unable to get token");
-                }
-            }).catch((err) => {
-                console.error("Error getting token:", err);
-            });
         } else {
             console.log("Notification permission denied");
         }
@@ -65,6 +67,7 @@ function requestPermissionAndSaveToken() {
         console.error("Error requesting permission:", err);
     });
 }
+
 
 
 // Llama a la función para solicitar permisos y guardar el token cuando se concede el permiso
