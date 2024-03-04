@@ -40,12 +40,9 @@ self.addEventListener('activate', async function () {
 });
 
 
-
 messaging.onBackgroundMessage((payload) => {
   console.log(
-    '[firebase-messaging-sw.js] Received background message ',
-    payload
-  );
+    '[firebase-messaging-sw.js] Received background message ', payload);
   // Customize notification here
   const notificationTitle = 'Background Message Title';
   const notificationOptions = {
@@ -56,7 +53,7 @@ messaging.onBackgroundMessage((payload) => {
   self.registration.showNotification(notificationTitle, notificationOptions);
 });
 
-self.addEventListener('push', function(event) {
+self.addEventListener('push', function (event) {
   console.log('[Service Worker] Push received');
   const notificationData = event.data.json(); // Obtenemos los datos de la notificación
   const { title, body, icon } = notificationData; // Extraemos el título, el cuerpo y el ícono de la notificación
@@ -71,7 +68,7 @@ self.addEventListener('push', function(event) {
   );
 });
 
-self.addEventListener('notificationclick', function(event) {
+self.addEventListener('notificationclick', function (event) {
   console.log('[Service Worker] Notification click received');
   event.notification.close(); // Cerramos la notificación al hacer clic en ella
 
