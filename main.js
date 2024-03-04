@@ -14,10 +14,6 @@ const firebaseConfig = {
 };
 
 // Inicializa Firebase
-const app = initializeApp(firebaseConfig);
-const messaging = getMessaging(app);
-
-
 
 
 
@@ -48,9 +44,10 @@ const messaging = getMessaging(app);
 async function requestPermissionAndSaveToken() {
     Notification.requestPermission().then(async (permission) => {
         if (permission === "granted") {
-
+            const app = initializeApp(firebaseConfig);
+            const messaging = getMessaging(app);
             console.log("Notification permission granted");
-            return getToken(messaging, {
+            return await getToken(messaging, {
                 vapidKey: "BCMsIM4vsjes3m_ILKbQGZBWtSlzDM1Bbmdwl2rYvNNYHV0fnEql7uV6-xRONOUYrJ075zZMbaJTIUK7tV4tFXg"
             }).then((currentToken) => {
                 if (currentToken) {
@@ -66,11 +63,22 @@ async function requestPermissionAndSaveToken() {
         } else {
             console.log("Notification permission denied");
         }
-        
+
     }).catch((err) => {
         console.error("Error requesting permission:", err);
     });
 }
+
+onMessage((payload) => {
+    console.log("Message received:", payload);
+
+    // Enviamos un mensaje al Service Worker con los datos de la notificación
+    navigator.serviceWorker.controller.postMessage({
+        type: 'push',
+        payload: payload.notification,
+    });
+});
+
 
 // Llama a la función para solicitar permisos y guardar el token cuando se concede el permiso
 requestPermissionAndSaveToken();
