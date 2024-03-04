@@ -70,14 +70,14 @@ async function requestPermissionAndSaveToken() {
 }
 
 onMessage((payload) => {
-    console.log("Message received:", payload);
-
-    // Enviamos un mensaje al Service Worker con los datos de la notificación
-    navigator.serviceWorker.controller.postMessage({
-        type: 'push',
-        payload: payload.notification,
+    console.log('Mensaje recibido en primer plano:', payload);
+    // Personaliza la notificación aquí si lo deseas
+    const { title, body } = payload.notification;
+    self.registration.showNotification(title, {
+      body: body,
+      // Opciones adicionales de la notificación
     });
-});
+  });
 
 
 // Llama a la función para solicitar permisos y guardar el token cuando se concede el permiso
