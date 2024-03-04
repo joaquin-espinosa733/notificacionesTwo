@@ -22,14 +22,17 @@ const app = firebase.initializeApp(firebaseConfig);
 const messaging = firebase.messaging(app);
 
 
-// Escucha el evento 'activate' para asegurarse de que el Service Worker esté activo antes de suscribirse a las notificaciones push
 self.addEventListener('activate', async function () {
+  // Espera a que el Service Worker esté activo
+  await self.clients.claim();
+
   try {
     // Obtén la suscripción a las notificaciones push
     const subscription = await self.registration.pushManager.subscribe({
       userVisibleOnly: true,
       applicationServerKey: 'BCMsIM4vsjes3m_ILKbQGZBWtSlzDM1Bbmdwl2rYvNNYHV0fnEql7uV6-xRONOUYrJ075zZMbaJTIUK7tV4tFXg'
     });
+
     console.log('Subscribed to push notifications:', subscription);
   } catch (err) {
     console.error('Failed to subscribe to push notifications:', err);
@@ -37,15 +40,43 @@ self.addEventListener('activate', async function () {
 });
 
 
-messaging.setBackgroundMessageHandler(function (payload) {
-  console.log('[firebase-messaging-sw.js] Received background message ', payload);
+
+messaging.onBackgroundMessage((payload) => {
+  console.log(
+    '[firebase-messaging-sw.js] Received background message ',
+    payload
+  );
   // Customize notification here
   const notificationTitle = 'Background Message Title';
   const notificationOptions = {
     body: 'Background Message body.',
-    icon: './firebase-logo.png'
+    icon: '/firebase-logo.png'
   };
 
-  return self.registration.showNotification(notificationTitle,
-    notificationOptions);
+  self.registration.showNotification(notificationTitle, notificationOptions);
 });
+
+self.addEventListener('push', function(event) {
+  console.log('[Service Worker] Push received');
+  const notificationData = event.data.json(); // Obtenemos los datos de la notificación
+  const { title, body, icon } = notificationData; // Extraemos el título, el cuerpo y el ícono de la notificación
+
+  // Mostramos la notificación al usuario
+  event.waitUntil(
+    self.registration.showNotification(title, {
+      body: body,
+      icon: icon,
+      // Aquí puedes agregar más opciones de configuración de la notificación
+    })
+  );
+});
+
+self.addEventListener('notificationclick', function(event) {
+  console.log('[Service Worker] Notification click received');
+  event.notification.close(); // Cerramos la notificación al hacer clic en ella
+
+  // Aquí puedes agregar la lógica que deseas ejecutar cuando el usuario hace clic en la notificación
+  // Por ejemplo, redireccionar a una URL específica, abrir una página de tu aplicación, etc.
+});
+
+

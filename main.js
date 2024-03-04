@@ -1,6 +1,6 @@
 // main.js
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import { getMessaging, getToken } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-messaging.js";
+import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-messaging.js";
 
 
 const firebaseConfig = {
@@ -18,40 +18,45 @@ const app = initializeApp(firebaseConfig);
 const messaging = getMessaging(app);
 
 
-function saveTokenToServer(token) {
-    // Crear un objeto con el token
-    const data = { token: token };
 
-    // Realizar una solicitud HTTP POST al servidor
-    fetch('http://localhost:3000/save-token', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
-    })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Failed to save token to server');
-            }
-            console.log('Token saved to server successfully');
-        })
-        .catch(error => {
-            console.error('Error saving token to server:', error);
-        });
-}
 
-function requestPermissionAndSaveToken() {
-    Notification.requestPermission().then((permission) => {
+
+// function saveTokenToServer(token) {
+//     // Crear un objeto con el token
+//     const data = { token: token };
+
+//     // Realizar una solicitud HTTP POST al servidor
+//     fetch('http://localhost:3000/save-token', {
+//         method: 'POST',
+//         headers: {
+//             'Content-Type': 'application/json'
+//         },
+//         body: JSON.stringify(data)
+//     })
+//         .then(response => {
+//             if (!response.ok) {
+//                 throw new Error('Failed to save token to server');
+//             }
+//             console.log('Token saved to server successfully');
+//         })
+//         .catch(error => {
+//             console.error('Error saving token to server:', error);
+//         });
+// }
+
+
+async function requestPermissionAndSaveToken() {
+    Notification.requestPermission().then(async (permission) => {
         if (permission === "granted") {
+
             console.log("Notification permission granted");
-            getToken(messaging, {
+            return getToken(messaging, {
                 vapidKey: "BCMsIM4vsjes3m_ILKbQGZBWtSlzDM1Bbmdwl2rYvNNYHV0fnEql7uV6-xRONOUYrJ075zZMbaJTIUK7tV4tFXg"
             }).then((currentToken) => {
                 if (currentToken) {
                     console.log("Current token:", currentToken);
                     // Enviar el token al servidor
-                    saveTokenToServer(currentToken);
+                    // saveTokenToServer(currentToken);
                 } else {
                     console.log("Unable to get token");
                 }
@@ -61,11 +66,11 @@ function requestPermissionAndSaveToken() {
         } else {
             console.log("Notification permission denied");
         }
+        
     }).catch((err) => {
         console.error("Error requesting permission:", err);
     });
 }
-
 
 // Llama a la función para solicitar permisos y guardar el token cuando se concede el permiso
 requestPermissionAndSaveToken();
