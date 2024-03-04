@@ -69,16 +69,5 @@ async function requestPermissionAndSaveToken() {
     });
 }
 
-onMessage((payload) => {
-    console.log('Mensaje recibido en primer plano:', payload);
-    // Personaliza la notificación aquí si lo deseas
-    const { title, body } = payload.notification;
-    self.registration.showNotification(title, {
-      body: body,
-      // Opciones adicionales de la notificación
-    });
-  });
-
-
 // Llama a la función para solicitar permisos y guardar el token cuando se concede el permiso
 requestPermissionAndSaveToken();

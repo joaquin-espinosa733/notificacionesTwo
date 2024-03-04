@@ -56,9 +56,9 @@ messaging.onBackgroundMessage((payload) => {
 self.addEventListener('push', function (event) {
   console.log('[Service Worker] Push received', event);
   // Customize notification here
-  const notificationTitle = 'Background Message Title';
+  const notificationTitle = 'Nuevas Notificaciones!';
   const notificationOptions = {
-    body: 'Background Message body.',
+    body: 'enterate de las nuevas noticias!',
     icon: '/firebase-logo.png'
   };
 
