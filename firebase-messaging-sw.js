@@ -53,4 +53,24 @@ messaging.onBackgroundMessage((payload) => {
   self.registration.showNotification(notificationTitle, notificationOptions);
 });
 
+self.addEventListener('push', function (event) {
+  console.log('[Service Worker] Push received', event);
+  // Customize notification here
+  const notificationTitle = 'Background Message Title';
+  const notificationOptions = {
+    body: 'Background Message body.',
+    icon: '/firebase-logo.png'
+  };
+
+  self.registration.showNotification(notificationTitle, notificationOptions);
+});
+
+self.addEventListener('notificationclick', function (event) {
+  console.log('[Service Worker] Notification click received');
+  event.notification.close(); // Cerramos la notificación al hacer clic en ella
+
+  // Aquí puedes agregar la lógica que deseas ejecutar cuando el usuario hace clic en la notificación
+  // Por ejemplo, redireccionar a una URL específica, abrir una página de tu aplicación, etc.
+});
+
 
