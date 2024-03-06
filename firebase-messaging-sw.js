@@ -15,11 +15,11 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = firebase.initializeApp(firebaseConfig);
+firebase.initializeApp(firebaseConfig);
 
 // Retrieve an instance of Firebase Messaging so that it can handle background
 // messages.
-const messaging = firebase.messaging(app);
+const messaging = firebase.messaging();
 
 
 self.addEventListener('activate', async function () {
@@ -68,9 +68,6 @@ self.addEventListener('push', function (event) {
 self.addEventListener('notificationclick', function (event) {
   console.log('[Service Worker] Notification click received');
   event.notification.close(); // Cerramos la notificación al hacer clic en ella
-
-  // Aquí puedes agregar la lógica que deseas ejecutar cuando el usuario hace clic en la notificación
-  // Por ejemplo, redireccionar a una URL específica, abrir una página de tu aplicación, etc.
 });
 
 

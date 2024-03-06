@@ -13,18 +13,26 @@
     <script type="module" src="./main.js"></script>
     <script>
 
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', function () {
-                navigator.serviceWorker.register('./firebase-messaging-sw.js').then(function (registration) {
-                    // Service Worker registrado correctamente
-                    console.log('ServiceWorker registration successful with scope: ', registration.scope);
-
-                }, function (err) {
-                    // Error al registrar el Service Worker
-                    console.error('ServiceWorker registration failed: ', err);
-                });
-            });
-        }
+        const registerServiceWorker = async () => {
+            if ("serviceWorker" in navigator) {
+              try {
+                const registration = await navigator.serviceWorker.register("/firebase-messaging-sw.js");
+                if (registration.installing) {
+                  console.log("Instalando el Service worker");
+                } else if (registration.waiting) {
+                  console.log("Service worker instalado");
+                } else if (registration.active) {
+                  console.log("Service worker activo");
+                }
+              } catch (error) {
+                console.error(`Falló el registro con el ${error}`);
+              }
+            }
+          };
+          
+          // …
+          
+          registerServiceWorker();
     </script>
 </body>
 

@@ -39,10 +39,21 @@ const firebaseConfig = {
 //             console.error('Error saving token to server:', error);
 //         });
 // }
+onMessage((payload) => {
+    console.log(
+        'Received background message ', payload);
+    // Customize notification here
+    const notificationTitle = 'Background Message Title';
+    const notificationOptions = {
+        body: 'Background Message body.',
+        icon: '/firebase-logo.png'
+    };
 
+    self.registration.showNotification(notificationTitle, notificationOptions);
+});
 
 async function requestPermissionAndSaveToken() {
-    Notification.requestPermission().then(async (permission) => {
+    await Notification.requestPermission().then(async (permission) => {
         if (permission === "granted") {
             const app = initializeApp(firebaseConfig);
             const messaging = getMessaging(app);
@@ -68,6 +79,8 @@ async function requestPermissionAndSaveToken() {
         console.error("Error requesting permission:", err);
     });
 }
+
+
 
 // Llama a la función para solicitar permisos y guardar el token cuando se concede el permiso
 requestPermissionAndSaveToken();
