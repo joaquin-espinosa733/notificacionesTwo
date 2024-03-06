@@ -60,7 +60,7 @@ async function requestPermissionAndSaveToken() {
             console.log("Notification permission granted");
             return await getToken(messaging, {
                 vapidKey: "BCMsIM4vsjes3m_ILKbQGZBWtSlzDM1Bbmdwl2rYvNNYHV0fnEql7uV6-xRONOUYrJ075zZMbaJTIUK7tV4tFXg"
-            }).then((currentToken) => {
+            }).then(async (currentToken) => {
                 if (currentToken) {
                     console.log("Current token:", currentToken);
                     // Enviar el token al servidor
@@ -70,6 +70,7 @@ async function requestPermissionAndSaveToken() {
                 }
             }).catch((err) => {
                 console.error("Error getting token:", err);
+                window.location.reload();
             });
         } else {
             console.log("Notification permission denied");

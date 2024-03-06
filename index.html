@@ -12,27 +12,25 @@
     <!-- Importa el archivo JavaScript como un módulo -->
     <script type="module" src="./main.js"></script>
     <script>
-
         const registerServiceWorker = async () => {
-            if ("serviceWorker" in navigator) {
-              try {
-                const registration = await navigator.serviceWorker.register("/firebase-messaging-sw.js");
-                if (registration.installing) {
-                  console.log("Instalando el Service worker");
-                } else if (registration.waiting) {
-                  console.log("Service worker instalado");
-                } else if (registration.active) {
-                  console.log("Service worker activo");
+            if ("Notification" in window &&
+                "serviceWorker" in navigator &&
+                "PushManager" in window) {
+                try {
+                    const registration = await navigator.serviceWorker.register("/firebase-messaging-sw.js");
+                    if (registration.installing) {
+                        console.log("Instalando el Service worker");
+                    } else if (registration.waiting) {
+                        console.log("Service worker instalado");
+                    } else if (registration.active) {
+                        console.log("Service worker activo");
+                    }
+                } catch (error) {
+                    console.error(`Falló el registro con el ${error}`);
                 }
-              } catch (error) {
-                console.error(`Falló el registro con el ${error}`);
-              }
             }
-          };
-          
-          // …
-          
-          registerServiceWorker();
+        };
+        registerServiceWorker();
     </script>
 </body>
 

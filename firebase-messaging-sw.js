@@ -22,24 +22,6 @@ firebase.initializeApp(firebaseConfig);
 const messaging = firebase.messaging();
 
 
-self.addEventListener('activate', async function () {
-  // Espera a que el Service Worker esté activo
-  await self.clients.claim();
-
-  try {
-    // Obtén la suscripción a las notificaciones push
-    const subscription = await self.registration.pushManager.subscribe({
-      userVisibleOnly: true,
-      applicationServerKey: 'BCMsIM4vsjes3m_ILKbQGZBWtSlzDM1Bbmdwl2rYvNNYHV0fnEql7uV6-xRONOUYrJ075zZMbaJTIUK7tV4tFXg'
-    });
-
-    console.log('Subscribed to push notifications:', subscription);
-  } catch (err) {
-    console.error('Failed to subscribe to push notifications:', err);
-  }
-});
-
-
 messaging.onBackgroundMessage((payload) => {
   console.log(
     '[firebase-messaging-sw.js] Received background message ', payload);
@@ -69,5 +51,24 @@ self.addEventListener('notificationclick', function (event) {
   console.log('[Service Worker] Notification click received');
   event.notification.close(); // Cerramos la notificación al hacer clic en ella
 });
+
+// self.addEventListener('activate', async function () {
+//   // Espera a que el Service Worker esté activo
+//   await self.clients.claim();
+
+//   try {
+//     // Obtén la suscripción a las notificaciones push
+//     const subscription = await self.registration.pushManager.subscribe({
+//       userVisibleOnly: true,
+//       applicationServerKey: 'BCMsIM4vsjes3m_ILKbQGZBWtSlzDM1Bbmdwl2rYvNNYHV0fnEql7uV6-xRONOUYrJ075zZMbaJTIUK7tV4tFXg'
+//     });
+
+//     console.log('Subscribed to push notifications:', subscription);
+//   } catch (err) {
+//     console.error('Failed to subscribe to push notifications:', err);
+//   }
+// });
+
+
 
 
