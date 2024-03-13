@@ -22,7 +22,7 @@ function saveTokenToServer(token) {
     const data = { token: token };
 
     // Realizar una solicitud HTTP POST al servidor
-    fetch('https://back-notificaciones-d4nz.onrender.com/save-token', {
+    fetch('https://back-notificaciones-m7kp.onrender.com/save-token', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
