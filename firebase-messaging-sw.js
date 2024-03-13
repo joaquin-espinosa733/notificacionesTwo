@@ -44,7 +44,7 @@ self.addEventListener('push', function (event) {
     icon: '/firebase-logo.png'
   };
 
-  self.registration.showNotification(notificationTitle, notificationOptions);
+  // self.registration.showNotification(notificationTitle, notificationOptions);
 });
 
 self.addEventListener('notificationclick', function (event) {
