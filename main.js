@@ -22,7 +22,7 @@ function saveTokenToServer(token) {
     const data = { token: token };
 
     // Realizar una solicitud HTTP POST al servidor
-    fetch('https://back-notificaciones.vercel.app/save-token', {
+    fetch('https://back-notificaciones-2imo.onrender.com/save-token', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
