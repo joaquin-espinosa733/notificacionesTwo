@@ -17,28 +17,28 @@ const firebaseConfig = {
 
 
 
-// function saveTokenToServer(token) {
-//     // Crear un objeto con el token
-//     const data = { token: token };
+function saveTokenToServer(token) {
+    // Crear un objeto con el token
+    const data = { token: token };
 
-//     // Realizar una solicitud HTTP POST al servidor
-//     fetch('http://localhost:3000/save-token', {
-//         method: 'POST',
-//         headers: {
-//             'Content-Type': 'application/json'
-//         },
-//         body: JSON.stringify(data)
-//     })
-//         .then(response => {
-//             if (!response.ok) {
-//                 throw new Error('Failed to save token to server');
-//             }
-//             console.log('Token saved to server successfully');
-//         })
-//         .catch(error => {
-//             console.error('Error saving token to server:', error);
-//         });
-// }
+    // Realizar una solicitud HTTP POST al servidor
+    fetch('https://back-notificaciones.vercel.app/save-token', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to save token to server');
+            }
+            console.log('Token saved to server successfully');
+        })
+        .catch(error => {
+            console.error('Error saving token to server:', error);
+        });
+}
 onMessage((payload) => {
     console.log(
         'Received background message ', payload);
@@ -64,7 +64,7 @@ async function requestPermissionAndSaveToken() {
                 if (currentToken) {
                     console.log("Current token:", currentToken);
                     // Enviar el token al servidor
-                    // saveTokenToServer(currentToken);
+                    saveTokenToServer(currentToken);
                 } else {
                     console.log("Unable to get token");
                 }
