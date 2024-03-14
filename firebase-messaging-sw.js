@@ -26,13 +26,13 @@ messaging.onBackgroundMessage((payload) => {
   console.log(
     '[firebase-messaging-sw.js] Received background message ', payload);
   // Customize notification here
-  const notificationTitle = 'Background Message Title';
+  const notificationTitle = 'Background Message Title22222';
   const notificationOptions = {
-    body: 'Background Message body.',
+    body: 'Background Message body.222',
     icon: '/firebase-logo.png'
   };
 
-  self.registration.showNotification(notificationTitle, notificationOptions);
+  // self.registration.showNotification(notificationTitle, notificationOptions);
 });
 
 self.addEventListener('push', function (event) {
@@ -44,7 +44,7 @@ self.addEventListener('push', function (event) {
     icon: '/firebase-logo.png'
   };
 
-  self.registration.showNotification(notificationTitle, notificationOptions);
+  // self.registration.showNotification(notificationTitle, notificationOptions);
 });
 
 self.addEventListener('notificationclick', function (event) {
